@@ -21,6 +21,7 @@ class App {
 		const formData = new FormData(event.target);
 		const time = formData.get('time');
 		const button = document.querySelector('button');
+		const input = document.querySelector('input');
 	
 		if (!this.isTimerRunning) {
 			this.#startTimer(time);
@@ -29,7 +30,8 @@ class App {
 		} else {
 			clearInterval(this.#interval);
 			this.isTimerRunning = false;
-			button.innerHTML = '<img src="./img/play.svg" alt="play"> Запустить'				
+			button.innerHTML = '<img src="./img/play.svg" alt="play"> Запустить (установите время)'	
+			input.value = '';			
 		}
 	}
 
