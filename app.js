@@ -8,6 +8,7 @@ class App {
 	#interval;
 	audioContext;
 	gainNode;
+	isTimerRunning = false;
 
 	constructor() {
 		this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -19,8 +20,17 @@ class App {
 		event.preventDefault();
 		const formData = new FormData(event.target);
 		const time = formData.get('time');
-		this.#clearTimer();
-		this.#startTimer(time);
+		const button = document.querySelector('button');
+	
+		if (!this.isTimerRunning) {
+			this.#startTimer(time);
+			this.isTimerRunning = true;
+			button.innerHTML = '<img src="./img/pause.svg" alt="play"> Пауза'		
+		} else {
+			clearInterval(this.#interval);
+			this.isTimerRunning = false;
+			button.innerHTML = '<img src="./img/play.svg" alt="play"> Запустить'				
+		}
 	}
 
 	#clearTimer() {
@@ -63,7 +73,12 @@ class App {
 					const source = this.audioContext.createBufferSource();
 					source.buffer = buffer;
 					source.connect(this.gainNode);
-					source.start(0);
+					source.start(0);	
+
+				// уведомление 
+					const notification = new Notification('Таймер завершил работу', {
+						body: 'Таймер завершил работу.'
+					});				
 				});
 			});
 	}
@@ -77,3 +92,5 @@ class App {
 }
 
 const app = new App();
+
+
